@@ -8,6 +8,8 @@ public class ProdutosApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProdutosApplication.class, args);
+		System.out.println("Acesse nosso site no link abaixo: ");
+		System.out.println("http://localhost:8080");
 	}
 
 }

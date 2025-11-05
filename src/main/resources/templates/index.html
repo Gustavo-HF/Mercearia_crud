@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <h1> Categoria dos Produtos </h1>
+        <h2> Adicionar novas Categorias </h2>
+        <form th:action="@{/adicionarCategoria}" th:object="${categoria}" method="post">
+            <input >
+        </form>
+        <select th:field="*{categoria}">
+            <option th:each="cat : ${categorias}"
+                    th:value="${cat}"
+                    th:text="${cat.nome}"></option>
+        </select>
+    </div>
+</body>
+</html>
