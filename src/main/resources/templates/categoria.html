@@ -10,7 +10,19 @@
         <h1> Categoria dos Produtos </h1>
         <h2> Adicionar novas Categorias </h2>
         <form th:action="@{/adicionarCategoria}" th:object="${categoria}" method="post">
-            <input >
+            <input 
+            type="text"
+            th:field="*{nome}"
+            placeholder="Nome da Categoria"
+            
+            >
+
+            <input 
+            type="text"
+            th:field="*{tipo}"
+            placeholder="Tipo da Categoria"
+            
+            >
         </form>
         <select th:field="*{categoria}">
             <option th:each="cat : ${categorias}"

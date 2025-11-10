@@ -32,7 +32,7 @@ public class CategoriaController {
         model.addAttribute("paginaCategoria", paginaCategoria);
         model.addAttribute("novaCategoria", new Categoria());
 
-        return "index";
+        return "categoria";
     }
 
     @PostMapping("/adicionarCategoria")
