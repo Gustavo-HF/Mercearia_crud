@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <h1> Nome dos Produtos </h1>
+        <h2> Adicionar novos Produtos </h2>
+        <form th:action="@{/adicionarProduto}" th:object="${produto}" method="post">
+            <input 
+            
+            type="text"
+            th:field="*{nome}"
+            placeholder="Nome do Produto"
+            
+            >
+
+            <input 
+            
+            type="number"
+            th:field="*{preco}"
+            placeholder="Preço do Produto"
+            
+            >
+
+            <input
+            
+            type="number"
+            th:field="*{ref}"
+            placeholder="Referência do Produto"            
+            >
+        </form>
+
+        <select th:field="*{produto}">
+            <option th:each="prod : ${produtos}"
+                    th:value="${prod}"
+                    th:text="${prod.nome}"></option>
+        </select>
+    </div>
+</body>
+</html>

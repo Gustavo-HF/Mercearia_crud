@@ -23,7 +23,7 @@ public class CategoriaController {
     private CategoriaRepository categoriaRepository;
 
     @GetMapping("/")
-    public String listaDeProdutos(Model model, @RequestParam(defaultValue="0") int page){
+    public String listaDeCategorias(Model model, @RequestParam(defaultValue="0") int page){
 
         int pageSize = 3;
         Pageable configuracaoPagina = PageRequest.of(page, pageSize);
