@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/product.css}">
     <title>Document</title>
 </head>
 <body>
@@ -32,13 +33,44 @@
             th:field="*{ref}"
             placeholder="Referência do Produto"            
             >
-        </form>
 
-        <select th:field="*{produto}">
-            <option th:each="prod : ${produtos}"
-                    th:value="${prod}"
-                    th:text="${prod.nome}"></option>
-        </select>
+            <button type="submit">Adicionar</button>
+
+        </form>
+         <h2> Produtos cadastrados </h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome do Produto</th>
+                    <th>Preço do Produto</th>
+                    <th>Referência do Produto</th>
+                </tr>
+            </thead>
+            <tr th:if="${paginaProduto.empty}">
+                <td colspan="4" style="text-align: center">
+                    Nenhum produto cadastrado ainda...
+                </td>
+            </tr>
+            <tr th:each="produto : ${paginaProduto.content}">
+                <td th:text="${produto.nome}">Nome do Produto</td>
+                <td th:text="${produto.preco}">Preço do Produto</td>
+                <td th:text="${produto.ref}">Referência do Produto</td>
+           
+                <td>
+                    <form th:action="@{/excluirProduto}" method="post">
+                        <input type="hidden" name="id" th:value="${produto.id}">
+                        <button type="submit">Excluir</button>
+                    </form>
+                </td>
+                   <td>
+                        <a th:href="@{/editarProduto/{id}(id=${produto.id})}">
+                            Editar
+                        </a>
+                    </td>
+            </tr>
+
+        </table>
+
     </div>
 </body>
 </html>

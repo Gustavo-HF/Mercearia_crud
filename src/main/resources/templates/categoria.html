@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{category.css}">
     <title>Document</title>
 </head>
 <body>
@@ -23,12 +24,43 @@
             placeholder="Tipo da Categoria"
             
             >
+            <button type="submit">Adicionar</button>
+
         </form>
-        <select th:field="*{categoria}">
-            <option th:each="cat : ${categorias}"
-                    th:value="${cat}"
-                    th:text="${cat.nome}"></option>
-        </select>
+
+        <hr/>
+
+        <h2> Categorias cadastradas </h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome da Categoria</th>
+                    <th>Tipo da Categoria</th>
+                </tr>
+            </thead>
+            <tr th:if="${paginaCategoria.empty}">
+                <td colspan="4" style="text-align: center">
+                    Nenhuma categoria cadastrada ainda...
+                </td>
+            </tr>
+            <tr th:each="categoria : ${paginaCategoria.content}">
+                <td th:text="${categoria.nome}">Nome da Categoria</td>
+                <td th:text="${categoria.tipo}">Tipo da Categoria</td>
+           
+                <td>
+                    <form th:action="@{/excluirCategoria}" method="post">
+                        <input type="hidden" name="id" th:value="${categoria.id}">
+                        <button type="submit">Excluir</button>
+                    </form>
+                </td>
+                   <td>
+                        <a th:href="@{/editarCategoria/{id}(id=${categoria.id})}">
+                            Editar
+                        </a>
+                    </td>
+            </tr>
+
+        </table>
     </div>
 </body>
 </html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+     <h1>Meus Produtos</h1>
+    <h2>Editar Produtos</h2>
+
+    <form th:action="@{/alterarProduto/{id}}" th:object="${produto}" method="post">
+        <input type="hidden" th:field="*{id}" />
+
+        <input
+            type="text"
+            th:field="*{nome}"
+            placeholder="Nome do Produto"
+            required
+        />
+
+        <input
+            type="number"
+            th:field="*{preco}"
+            placeholder="Preço do Produto"
+        />
+
+        <input 
+            type="number"
+            th:field="*{ref}"
+            placeholder="Referência do Produto"
+        />
+
+        <button type="submit">Alterar</button>
+    </form>
+</body>
+</html>

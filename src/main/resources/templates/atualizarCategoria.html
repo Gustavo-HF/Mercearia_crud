@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+     <h1>Minhas Categorias</h1>
+    <h2>Editar Categorias</h2>
+
+    <form th:action="@{/alterarCategoria/{id}}" th:object="${categoria}" method="post">
+        <input type="hidden" th:field="*{id}" />
+
+        <input
+            type="text"
+            th:field="*{nome}"
+            placeholder="Nome da Categoria"
+            required
+        />
+
+        <input
+            type="text"
+            th:field="*{tipo}"
+            placeholder="Tipo da Categoria"
+        />
+
+        <button type="submit">Alterar</button>
+    </form>
+</body>
+</html>
