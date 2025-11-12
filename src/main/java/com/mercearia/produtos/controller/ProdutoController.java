@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mercearia.produtos.model.Produto;
+import com.mercearia.produtos.repository.CategoriaRepository;
 import com.mercearia.produtos.repository.ProdutoRepository;
 
 
@@ -22,6 +23,11 @@ public class ProdutoController {
 
     @Autowired
     private ProdutoRepository produtoRepository;
+
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+
+
 
     @GetMapping("/produtos")
     public String listaDeProdutos(Model model, @RequestParam(defaultValue="0")int page ) {
@@ -36,14 +42,42 @@ public class ProdutoController {
     }
 
     @PostMapping("/adicionarProduto")
-    public String adicionarProduto(@ModelAttribute Produto produto){ 
-        produtoRepository.save(produto);
-        return "redirect:/";
+    public String adicionarProduto(@ModelAttribute Produto produto, Model model, @RequestParam(defaultValue="0") int page) {
+    boolean erro = false;
+    StringBuilder mensagens = new StringBuilder();
+
+    if (produto.getNome() == null || produto.getNome().trim().isEmpty()) {
+        mensagens.append("Nome do produto não pode estar vazio. \n");
+        erro = true;
     }
+
+    if (produto.getPreco() <= 0 || produto.getPreco() > 100000) {
+        mensagens.append("Preço inválido: deve ser maior que zero e até 100.000. \n");
+        erro = true;
+    }
+
+    if (produto.getRef() == 0) {
+        mensagens.append("Referência inválida: não pode ser zero. \n");
+        erro = true;
+    }
+
+    if (erro) {
+        Pageable pageable = PageRequest.of(page, 3);
+        Page<Produto> paginaProduto = produtoRepository.findAll(pageable);
+        model.addAttribute("paginaProduto", paginaProduto);
+        model.addAttribute("produto", produto);
+        model.addAttribute("mensagemErro", mensagens.toString());
+        return "produto";
+    }
+
+    produtoRepository.save(produto);
+    return "redirect:/dashboard";
+}
+
     @PostMapping("/excluirProduto")
     public String excluirProduto(@RequestParam Long id) {
         produtoRepository.deleteById(id);
-        return "redirect:/";
+        return "redirect:/dashboard";
     }
     @GetMapping("/editarProduto/{id}")
     public String editarProduto(@PathVariable Long id, Model model) {
@@ -52,7 +86,7 @@ public class ProdutoController {
             model.addAttribute("produto", produto);
             return "atualizarProduto";
         } else {
-            return "redirect:/";
+            return "redirect:/dashboard";
         }
 
     }
@@ -60,7 +94,7 @@ public class ProdutoController {
     @PostMapping("/alterarProduto/{id}")
     public String alterarCategoria(@ModelAttribute("produto") Produto produto) {
         produtoRepository.save(produto);
-        return "redirect:/";
+        return "redirect:/dashboard";
     }
     
     

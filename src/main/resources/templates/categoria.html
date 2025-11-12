@@ -10,6 +10,11 @@
     <div>
         <h1> Categoria dos Produtos </h1>
         <h2> Adicionar novas Categorias </h2>
+
+        <div th:if="${mensagemErro}" style="color: red; font-weight: bold; margin-bottom: 10px;">
+            <p th:text="${mensagemErro}"></p>
+        </div>
+
         <form th:action="@{/adicionarCategoria}" th:object="${categoria}" method="post">
             <input 
             type="text"
@@ -54,7 +59,7 @@
                     </form>
                 </td>
                    <td>
-                        <a th:href="@{/editarCategoria/{id}(id=${categoria.id})}">
+                        <a th:href="@{/editarCategoria/{id}(id=${categoria.id})}" class="btn-editar">
                             Editar
                         </a>
                     </td>

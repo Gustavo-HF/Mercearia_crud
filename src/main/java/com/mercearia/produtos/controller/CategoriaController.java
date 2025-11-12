@@ -38,15 +38,33 @@ public class CategoriaController {
     }
 
     @PostMapping("/adicionarCategoria")
-    public String adicionarCategoria(@ModelAttribute Categoria categoria) {
-        categoriaRepository.save(categoria);
-        return "redirect:/";
+public String adicionarCategoria(@ModelAttribute Categoria categoria, Model model, @RequestParam(defaultValue = "0") int page) {
+    boolean erro = false;
+
+    if (categoria.getNome() == null || categoria.getNome().trim().isEmpty()) {
+        model.addAttribute("mensagemErro", "Nome da categoria não pode estar vazio");
+        erro = true;
     }
+
+     if (categoria.getTipo() == null || categoria.getTipo().trim().isEmpty()) {
+        model.addAttribute("mensagemErro", "Tipo da categoria não pode estar vazio");
+        erro = true;
+    }
+
+    if (erro) {
+        model.addAttribute("paginaCategoria", categoriaRepository.findAll(PageRequest.of(page, 3)));
+        model.addAttribute("categoria", categoria);
+        return "categoria"; // nome do seu template HTML para categorias
+    }
+
+    categoriaRepository.save(categoria);
+    return "redirect:/dashboard";
+}
 
     @PostMapping("/excluirCategoria")
     public String excluirCategoria(@RequestParam Long id) {
         categoriaRepository.deleteById(id);
-        return "redirect:/";
+        return "redirect:/dashboard";
     }
 
     @GetMapping("/editarCategoria/{id}")
@@ -56,7 +74,7 @@ public class CategoriaController {
             model.addAttribute("categoria", categoria);
             return "atualizarCategoria";
         } else {
-            return "redirect:/";
+            return "redirect:/dashboard";
         }
 
     }
@@ -64,7 +82,7 @@ public class CategoriaController {
     @PostMapping("/alterarCategoria/{id}")
     public String alterarCategoria(@ModelAttribute("categoria") Categoria categoria) {
         categoriaRepository.save(categoria);
-        return "redirect:/";
+        return "redirect:/dashboard";
     }
     
 

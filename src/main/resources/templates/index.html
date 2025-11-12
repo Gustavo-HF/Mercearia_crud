@@ -1,25 +1,105 @@
- <!DOCTYPE html>
- <html lang="pt-br">
- <head>
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Mercearia Doze</title>
     <link rel="stylesheet" th:href="@{/style.css}">
-    <title>Dashboard</title>
- </head>
- <body>
-     <h1>Dashboard de Fluxo de Dados</h1>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo">
+                <h2>Mercearia<span>Doze</span></h2>
+            </div>
+            <nav class="menu">
+                <a th:href="@{/dashboard}" class="active">🏠 Dashboard</a>
+                <a th:href="@{/categoria}">📂 Categorias</a>
+                <a th:href="@{/produtos}">🛒 Produtos</a>
+            </nav>
+        </aside>
 
-    <div>
-        <p>Total de Categorias: <span th:text="${totalCategorias}">0</span></p>
-        <p>Total de Produtos: <span th:text="${totalProdutos}">0</span></p>
+        <main class="content">
+            <header>
+                <h1>Menu de Cadastro de Produtos</h1>
+                <p>Gerencie categorias e produtos diretamente aqui.</p>
+            </header>
+
+            <section class="cards">
+                <div class="card">
+                    <h3>Total de Categorias</h3>
+                    <p th:text="${totalCategorias}">0</p>
+                </div>
+                <div class="card">
+                    <h3>Total de Produtos</h3>
+                    <p th:text="${totalProdutos}">0</p>
+                </div>
+            </section>
+
+            <hr/>
+
+            <section class="form-section">
+                <h2>Adicionar Produto</h2>
+                <form th:action="@{/dashboard/adicionarProduto}" th:object="${novoProduto}" method="post">
+                    <input type="text" th:field="*{nome}" placeholder="Nome do Produto" required>
+                    <input type="text" th:field="*{preco}" placeholder="Preço" required>
+                    <input type="number" th:field="*{ref}" placeholder="Referência" required>
+
+                    <select name="categoriaId" required>
+                        <option value="" disabled selected>Selecione uma categoria</option>
+                        <option th:each="cat : ${categorias}" 
+                            th:value="${cat.id}" 
+                            th:text="${cat.nome}">
+                        </option>
+                    </select>
+
+
+                    <button type="submit">Cadastrar Produto</button>
+                </form>
+            </section>
+
+            <section class="tables">
+                <div class="table-container">
+                    <h2>Categorias</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Tipo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="cat : ${categorias}">
+                                <td th:text="${cat.nome}"></td>
+                                <td th:text="${cat.tipo}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-container">
+                    <h2>Produtos</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Preço</th>
+                                <th>Referência</th>
+                                <th>Categoria</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="prod : ${produtos}">
+                                <td th:text="${prod.nome}"></td>
+                                <td th:text="${prod.preco}"></td>
+                                <td th:text="${prod.ref}"></td>
+                                <td th:text="${prod.categoria != null ? prod.categoria.nome : 'Sem categoria'}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
     </div>
-
-    <nav>
-        <ul>
-            <li><a th:href="@{/categoria}">Gerenciar Categorias</a></li>
-            <li><a th:href="@{/produtos}">Gerenciar Produtos</a></li>
-        </ul>
-    </nav>
-
- </body>
- </html>
+</body>
+</html>
