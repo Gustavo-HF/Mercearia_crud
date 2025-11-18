@@ -10,20 +10,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.mercearia.produtos.model.Categoria;
 import com.mercearia.produtos.model.Produto;
-import com.mercearia.produtos.repository.CategoriaRepository;
-import com.mercearia.produtos.repository.ProdutoRepository;
+import com.mercearia.produtos.service.DashboardService;
 
 
 @Controller
 public class DashboardController {
 
-    @Autowired
-    private CategoriaRepository categoriaRepository;
-
-    @Autowired
-    private ProdutoRepository produtoRepository;
+   @Autowired
+   private DashboardService dashboardService;
 
     @GetMapping("/")
     public String redirectToDashboard() {
@@ -32,19 +27,13 @@ public class DashboardController {
 
     @GetMapping("/dashboard")
     public String dashBoard(Model model) {
-        model.addAttribute("totalCategorias", categoriaRepository.count());
-        model.addAttribute("totalProdutos", produtoRepository.count());
-        model.addAttribute("categorias", categoriaRepository.findAll());
-        model.addAttribute("produtos", produtoRepository.findAll());
-        model.addAttribute("novoProduto", new Produto());
+        dashboardService.menu(model);
         return "index";
     }
 
     @PostMapping("/dashboard/adicionarProduto")
     public String adicionarProduto(@ModelAttribute Produto novoProduto, @RequestParam Long categoriaId) {
-        Categoria categoria = categoriaRepository.findById(categoriaId).orElse(null);
-        novoProduto.setCategoria(categoria);
-        produtoRepository.save(novoProduto);
+        dashboardService.cadastrar(novoProduto, categoriaId);
         return "redirect:/dashboard";
     }
 }

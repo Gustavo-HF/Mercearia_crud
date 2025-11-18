@@ -1,5 +1,4 @@
 package com.mercearia.produtos.controller;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,17 +14,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.mercearia.produtos.model.Produto;
 import com.mercearia.produtos.repository.CategoriaRepository;
 import com.mercearia.produtos.repository.ProdutoRepository;
-
+import com.mercearia.produtos.service.ProdutoService;
 
 
 @Controller
 public class ProdutoController {
+
+    private final ProdutoService produtoService;
 
     @Autowired
     private ProdutoRepository produtoRepository;
 
     @Autowired
     private CategoriaRepository categoriaRepository;
+
+
+    ProdutoController(ProdutoService produtoService) {
+        this.produtoService = produtoService;
+    }
 
 
 
@@ -43,45 +49,18 @@ public class ProdutoController {
 
     @PostMapping("/adicionarProduto")
     public String adicionarProduto(@ModelAttribute Produto produto, Model model, @RequestParam(defaultValue="0") int page) {
-    boolean erro = false;
-    StringBuilder mensagens = new StringBuilder();
-
-    if (produto.getNome() == null || produto.getNome().trim().isEmpty()) {
-        mensagens.append("Nome do produto não pode estar vazio. \n");
-        erro = true;
-    }
-
-    if (produto.getPreco() <= 0 || produto.getPreco() > 100000) {
-        mensagens.append("Preço inválido: deve ser maior que zero e até 100.000. \n");
-        erro = true;
-    }
-
-    if (produto.getRef() == 0) {
-        mensagens.append("Referência inválida: não pode ser zero. \n");
-        erro = true;
-    }
-
-    if (erro) {
-        Pageable pageable = PageRequest.of(page, 3);
-        Page<Produto> paginaProduto = produtoRepository.findAll(pageable);
-        model.addAttribute("paginaProduto", paginaProduto);
-        model.addAttribute("produto", produto);
-        model.addAttribute("mensagemErro", mensagens.toString());
-        return "produto";
-    }
-
-    produtoRepository.save(produto);
+    produtoService.adicionarProduto(produto, model, page);
     return "redirect:/dashboard";
 }
 
     @PostMapping("/excluirProduto")
     public String excluirProduto(@RequestParam Long id) {
-        produtoRepository.deleteById(id);
+        produtoService.deletarProduto(id);
         return "redirect:/dashboard";
     }
     @GetMapping("/editarProduto/{id}")
     public String editarProduto(@PathVariable Long id, Model model) {
-        Produto produto = produtoRepository.findById(id).orElse(null);
+        Produto produto = produtoService.editarProduto(id);
         if (produto != null) {
             model.addAttribute("produto", produto);
             return "atualizarProduto";
@@ -93,7 +72,7 @@ public class ProdutoController {
 
     @PostMapping("/alterarProduto/{id}")
     public String alterarCategoria(@ModelAttribute("produto") Produto produto) {
-        produtoRepository.save(produto);
+        produtoService.alterarProduto(produto);
         return "redirect:/dashboard";
     }
     
