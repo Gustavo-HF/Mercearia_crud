@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Mercearia Doze</title>
     <link rel="stylesheet" th:href="@{/style.css}">
 </head>
+
 <body>
     <div class="container">
         <aside class="sidebar">
@@ -36,23 +38,26 @@
                 </div>
             </section>
 
-            <hr/>
+            <hr />
 
             <section class="form-section">
                 <h2>Adicionar Produto</h2>
                 <form th:action="@{/dashboard/adicionarProduto}" th:object="${novoProduto}" method="post">
+                    
+
                     <input type="text" th:field="*{nome}" placeholder="Nome do Produto" required>
                     <input type="text" th:field="*{preco}" placeholder="Preço" required>
                     <input type="number" th:field="*{ref}" placeholder="Referência" required>
 
                     <select name="categoriaId" required>
                         <option value="" disabled selected>Selecione uma categoria</option>
-                        <option th:each="cat : ${categorias}" 
-                            th:value="${cat.id}" 
-                            th:text="${cat.nome}">
+                        <option th:each="cat : ${categorias}" th:value="${cat.id}" th:text="${cat.nome}">
                         </option>
                     </select>
-
+                     
+                    <div th:if="${#fields.hasErrors('categoria.id')}" th:errors="*{categoria.id}" class="error"></div>
+                    
+                    
 
                     <button type="submit">Cadastrar Produto</button>
                 </form>
@@ -102,4 +107,5 @@
         </main>
     </div>
 </body>
+
 </html>

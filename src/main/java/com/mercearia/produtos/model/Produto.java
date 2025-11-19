@@ -6,6 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PositiveOrZero;
 
 @Entity
 public class Produto {
@@ -14,8 +16,13 @@ public class Produto {
 
     private Long id;
 
+    @NotBlank (message= "O nome do Produto não pode estar vazio")
     private String nome;
+
+    @PositiveOrZero(message= "O preço do Produto deve ser maior ou igual a zero")
     private double preco;
+
+    @NotBlank(message= "O campo referência não pode estar vazio")
     private int ref;
 
     @ManyToOne

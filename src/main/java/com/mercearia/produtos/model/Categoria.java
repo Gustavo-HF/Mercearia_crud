@@ -2,11 +2,15 @@ package com.mercearia.produtos.model;
 
 import java.util.List;
 
+import io.micrometer.common.lang.NonNull;
+import io.micrometer.common.lang.Nullable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Categoria {
@@ -15,7 +19,10 @@ public class Categoria {
 
     private Long id;
 
+    @NotBlank(message= "O nome da categoria não pode estar vazio")
     private String nome;
+
+    @NotBlank(message= "O tipo da categoria não pode estar vazio")
     private String tipo;
 
     @OneToMany(mappedBy="categoria")
@@ -66,6 +73,5 @@ public class Categoria {
     public void setProdutos(List<Produto> produtos) {
         this.produtos = produtos;
     }
-
 
 }

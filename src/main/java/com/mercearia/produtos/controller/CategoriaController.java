@@ -1,11 +1,14 @@
 package com.mercearia.produtos.controller;
 
+import javax.naming.Binding;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.mercearia.produtos.model.Categoria;
 import com.mercearia.produtos.repository.CategoriaRepository;
 import com.mercearia.produtos.service.CategoriaService;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class CategoriaController {
@@ -42,8 +47,11 @@ public class CategoriaController {
     }
 
     @PostMapping("/adicionarCategoria")
-    public String adicionarCategoria(@ModelAttribute Categoria categoria, Model model, @RequestParam(defaultValue = "0") int page) {
-        categoriaService.adicionarCategoria(categoria, model, page);
+    public String adicionarCategoria(@Valid @ModelAttribute Categoria categoria, Model model, @RequestParam(defaultValue = "0") int page, BindingResult result) {
+        if (result.hasErrors()){
+            return "categoria";
+        }
+        categoriaService.adicionarCategoria(categoria);
         return "redirect:/dashboard";
     }
 
